@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block title %}Posts - Social Media Content Planner{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">Posts</h3>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary"
+       href="{{ url_for('main.export_posts', q=search_term, platform=platform_filter, status=status_filter, campaign_id=campaign_filter) }}">
+      Export CSV
+    </a>
+    <a class="btn btn-primary" href="{{ url_for('main.new_post') }}">New Post</a>
+  </div>
+</div>
+
+<div class="card p-3 mb-3">
+  <form method="GET" action="{{ url_for('main.posts') }}">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label">Search</label>
+        <input type="text" name="q" class="form-control" placeholder="Search title or content"
+               value="{{ search_term }}">
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Platform</label>
+        <select name="platform" class="form-select">
+          <option value="">All</option>
+          <option value="Facebook" {% if platform_filter == "Facebook" %}selected{% endif %}>Facebook</option>
+          <option value="Instagram" {% if platform_filter == "Instagram" %}selected{% endif %}>Instagram</option>
+          <option value="LinkedIn" {% if platform_filter == "LinkedIn" %}selected{% endif %}>LinkedIn</option>
+          <option value="TikTok" {% if platform_filter == "TikTok" %}selected{% endif %}>TikTok</option>
+          <option value="X" {% if platform_filter == "X" %}selected{% endif %}>X</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+          <option value="">All</option>
+          <option value="Draft" {% if status_filter == "Draft" %}selected{% endif %}>Draft</option>
+          <option value="Scheduled" {% if status_filter == "Scheduled" %}selected{% endif %}>Scheduled</option>
+          <option value="Posted" {% if status_filter == "Posted" %}selected{% endif %}>Posted</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Campaign</label>
+        <select name="campaign_id" class="form-select">
+          <option value="">All</option>
+          {% for campaign in campaigns %}
+            <option value="{{ campaign.id }}" {% if campaign_filter == campaign.id|string %}selected{% endif %}>
+              {{ campaign.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-2 d-flex gap-2">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+        <a href="{{ url_for('main.posts') }}" class="btn btn-outline-secondary w-100">Reset</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="card p-3">
+  {% if posts %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Campaign</th>
+            <th>Title</th>
+            <th>Platform</th>
+            <th>Status</th>
+            <th>Scheduled</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for post in posts %}
+          <tr>
+            <td>{{ post.campaign.name }}</td>
+            <td>{{ post.title }}</td>
+            <td>{{ post.platform }}</td>
+            <td>{{ post.status }}</td>
+            <td>{{ post.scheduled_at or '-' }}</td>
+            <td>
+              <a href="{{ url_for('main.edit_post', post_id=post.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+              <form action="{{ url_for('main.delete_post', post_id=post.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-sm btn-outline-danger"
+                        onclick="return confirm('Delete this post?');">Delete</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if pagination.pages > 1 %}
+    <nav aria-label="Posts pagination">
+      <ul class="pagination justify-content-center mt-3 mb-0">
+        <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+          <a class="page-link"
+             href="{{ url_for('main.posts', page=pagination.prev_num, q=search_term, platform=platform_filter, status=status_filter, campaign_id=campaign_filter) }}">
+            Previous
+          </a>
+        </li>
+
+        {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+          {% if page_num %}
+            <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+              <a class="page-link"
+                 href="{{ url_for('main.posts', page=page_num, q=search_term, platform=platform_filter, status=status_filter, campaign_id=campaign_filter) }}">
+                {{ page_num }}
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">…</span></li>
+          {% endif %}
+        {% endfor %}
+
+        <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+          <a class="page-link"
+             href="{{ url_for('main.posts', page=pagination.next_num, q=search_term, platform=platform_filter, status=status_filter, campaign_id=campaign_filter) }}">
+            Next
+          </a>
+        </li>
+      </ul>
+    </nav>
+    {% endif %}
+  {% else %}
+    <p class="text-muted mb-0">No posts match your current filter.</p>
+  {% endif %}
+</div>
+{% endblock %}

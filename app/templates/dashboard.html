@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Social Media Content Planner{% endblock %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-md-3"><div class="card p-3 stat-card"><h6>Total Posts</h6><h2>{{ stats.total_posts }}</h2></div></div>
+  <div class="col-md-3"><div class="card p-3 stat-card"><h6>Scheduled</h6><h2>{{ stats.scheduled_posts }}</h2></div></div>
+  <div class="col-md-3"><div class="card p-3 stat-card"><h6>Drafts</h6><h2>{{ stats.draft_posts }}</h2></div></div>
+  <div class="col-md-3"><div class="card p-3 stat-card"><h6>Published</h6><h2>{{ stats.published_posts }}</h2></div></div>
+</div>
+
+<div class="row mt-4 g-3">
+  <div class="col-md-4">
+    <div class="card p-3 stat-card h-100">
+      <h6>Total Campaigns</h6>
+      <h2>{{ summary.total_campaigns }}</h2>
+      <p class="text-muted mb-0">Campaigns currently active in your account.</p>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card p-3 stat-card h-100">
+      <h6>Posts This Week</h6>
+      <h2>{{ summary.upcoming_7_days }}</h2>
+      <p class="text-muted mb-0">Scheduled within the next 7 days.</p>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card p-3 stat-card h-100">
+      <h6>Next Scheduled Post</h6>
+      <h2 style="font-size: 1.2rem;">{{ summary.next_scheduled_post }}</h2>
+      <p class="text-muted mb-0">Your nearest planned publication.</p>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4 g-3">
+  <div class="col-lg-6">
+    <div class="card p-3 h-100">
+      <h5 class="mb-3">Post Status Overview</h5>
+      <canvas id="postStatusChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card p-3 h-100">
+      <h5>Upcoming Posts</h5>
+      {% if upcoming_posts %}
+        <ul class="list-group list-group-flush">
+          {% for post in upcoming_posts %}
+            <li class="list-group-item d-flex justify-content-between">
+              <span>{{ post.title }}</span>
+              <span>{{ post.platform }} · {{ post.status }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-muted mb-0">No posts yet. Create your first post.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4 g-3">
+  <div class="col-lg-4">
+    <div class="card p-3">
+      <h5>Quick Actions</h5>
+      <a class="btn btn-primary w-100 mb-2" href="{{ url_for('main.new_post') }}">Create New Post</a>
+      <a class="btn btn-outline-secondary w-100 mb-2" href="{{ url_for('main.new_campaign') }}">Create Campaign</a>
+      <a class="btn btn-outline-secondary w-100" href="{{ url_for('main.calendar') }}">View Calendar</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('postStatusChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ chart_data['labels'] | tojson }},
+      datasets: [{
+        label: 'Posts',
+        data: {{ chart_data['post_values'] | tojson }},
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 } }
+      }
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Edit Campaign - Social Media Content Planner{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Edit Campaign</h3>
+        <a href="{{ url_for('main.campaigns') }}" class="btn btn-outline-secondary">Back</a>
+      </div>
+
+      <form method="POST" action="{{ url_for('main.edit_campaign', campaign_id=campaign.id) }}">
+        <div class="mb-3">
+          <label class="form-label">Campaign Name</label>
+          <input type="text" name="name" class="form-control" value="{{ campaign.name }}" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea name="description" class="form-control" rows="4">{{ campaign.description or '' }}</textarea>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Start Date</label>
+            <input type="date" name="start_date" class="form-control"
+                   value="{{ campaign.start_date.strftime('%Y-%m-%d') if campaign.start_date else '' }}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">End Date</label>
+            <input type="date" name="end_date" class="form-control"
+                   value="{{ campaign.end_date.strftime('%Y-%m-%d') if campaign.end_date else '' }}">
+          </div>
+        </div>
+
+        <div class="text-end mt-4">
+          <button type="submit" class="btn btn-primary">Update Campaign</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

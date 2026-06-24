@@ -1,0 +1,5 @@
+body { background: #f7f8fb; }
+.card { border: 0; border-radius: 1rem; box-shadow: 0 10px 30px rgba(15,23,42,.05); }
+.stat-card h2 { font-size: 2rem; margin-bottom: 0; }
+.btn-primary { background: #5b3df5; border-color: #5b3df5; }
+.btn-primary:hover { background: #4d32d6; border-color: #4d32d6; }
