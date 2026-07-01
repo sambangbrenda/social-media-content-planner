@@ -125,18 +125,11 @@ Set these in Render:
 
 ## Updating the Project
 
-When you change the README or stylesheet, commit and push the files to GitHub:
+When you want to update all files, commit and push the files to GitHub:
 
 ```bash
-git add README.md app/static/css/style.css
-git commit -m "Update README and responsive styling"
+git status
+git add .
+git commit -m "Update all files"
 git push origin main
 ```
-
-If your stylesheet file is currently named `style_updated.css`, rename or copy it to `app/static/css/style.css` before committing.
-
-## Notes
-
-- The application is responsive for mobile view.
-- The login and register screens use a split-screen design on desktop and stack on smaller screens.
-- The profile dropdown includes Profile, Settings, and Logout actions.

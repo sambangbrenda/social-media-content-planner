@@ -728,96 +728,22 @@ html[data-theme="dark"] .dropdown-item:hover {
   opacity: 1;
 }
 
-/* =========================================================
-   AUTH PAGE CLEANUP / MOBILE FIXES
-   ========================================================= */
-
-/* Make the brand title readable on auth pages */
-.auth-hero .brand,
-.auth-hero .brand span,
-.auth-hero .brand i {
-  color: #111827 !important;
-  opacity: 1 !important;
-}
-
-/* Strengthen the auth page split layout */
-.auth-page {
-  overflow-x: hidden;
-}
-
-.auth-card {
-  grid-template-columns: 1.05fr 0.95fr;
-}
-
-.auth-hero {
-  min-width: 0;
-}
-
-.auth-panel {
-  min-width: 0;
-}
-
-.auth-form {
-  min-width: 0;
-}
-
-/* Better dropdown/profile look on all themes */
-.dropdown-toggle::after {
-  display: none;
-}
-
-.dropdown-menu {
-  border-radius: 16px;
-  padding: 8px;
-  border: 1px solid #e7e8f2;
-  box-shadow: 0 14px 40px rgba(18, 22, 43, 0.12);
-}
-
-.dropdown-item {
-  border-radius: 12px;
-  padding: 10px 14px;
-  font-weight: 600;
-}
-
-.dropdown-item:hover {
-  background: #f4f1ff;
-}
-
-/* Mobile responsiveness */
+/* Mobile compact override: keep all sections visible */
 @media (max-width: 1100px) {
   .app-shell {
-    grid-template-columns: 1fr;
+    grid-template-columns: 220px minmax(0, 1fr);
   }
 
-  .sidebar {
-    display: none;
+  .main-panel {
+    padding: 16px;
+  }
+
+  .topbar {
+    padding: 0 18px;
   }
 
   .auth-card {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
-
-  .auth-hero {
-    display: none;
-  }
-
-  .auth-panel {
-    padding: 20px;
-  }
-
-  .auth-form {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 992px) {
-  .auth-hero h1 {
-    font-size: 2rem;
-  }
-
-  .auth-hero p {
-    max-width: 100%;
+    grid-template-columns: 0.9fr 1.1fr;
   }
 }
 
@@ -826,67 +752,164 @@ html[data-theme="dark"] .dropdown-item:hover {
     overflow-x: hidden;
   }
 
+  .app-shell {
+    grid-template-columns: 176px minmax(0, 1fr);
+  }
+
+  .sidebar {
+    display: flex;
+    padding: 16px 12px;
+  }
+
+  .brand {
+    gap: 8px;
+    padding: 4px 4px 14px 4px;
+    font-size: 0.9rem;
+  }
+
+  .brand-badge {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .nav-group {
+    gap: 8px;
+  }
+
+  .nav-item {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    border-radius: 14px;
+  }
+
   .main-panel {
-    padding: 0;
+    padding: 10px;
+    min-width: 0;
   }
 
   .topbar {
-    border-radius: 0;
-    padding: 14px 16px;
     height: auto;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    min-height: 66px;
+    padding: 12px 14px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .page-title {
+    font-size: 1.3rem;
   }
 
   .topbar-right {
-    width: 100%;
-    justify-content: flex-end;
+    gap: 10px;
     flex-wrap: wrap;
   }
 
   .content-wrap {
-    border-radius: 0;
     padding: 12px;
-  }
-
-  .auth-page {
-    padding: 0;
-    min-height: 100vh;
-  }
-
-  .auth-card {
-    border-radius: 0;
-    box-shadow: none;
-    border: 0;
-    min-height: 100vh;
-  }
-
-  .auth-panel {
-    padding: 16px;
-  }
-
-  .auth-form {
-    padding: 22px 18px;
-    border-radius: 18px;
-  }
-
-  .page-title {
-    font-size: 1.4rem;
+    min-width: 0;
   }
 
   .cardx,
-  .section-card,
   .form-card {
     border-radius: 18px;
+  }
+
+  .auth-page {
+    padding: 10px;
+  }
+
+  .auth-card {
+    display: grid;
+    grid-template-columns: 0.75fr 1.25fr;
+    min-height: auto;
+    width: 100%;
+  }
+
+  .auth-hero {
+    display: flex;
+    padding: 18px 14px;
+  }
+
+  .auth-hero h1 {
+    font-size: 1.55rem;
+    margin: 16px 0 10px;
+  }
+
+  .auth-hero p {
+    max-width: 100%;
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+
+  .auth-art {
+    height: 180px;
+    margin-top: 16px;
+  }
+
+  .auth-art-text {
+    left: 16px;
+    top: 16px;
+    font-size: 0.9rem;
+  }
+
+  .auth-art-box {
+    width: 150px;
+    height: 100px;
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .auth-art-icon {
+    font-size: 2.2rem;
+  }
+
+  .auth-copy {
+    font-size: 0.78rem;
+  }
+
+  .auth-panel {
+    padding: 12px;
+  }
+
+  .auth-form {
+    padding: 18px;
+    border-radius: 20px;
+    max-width: 100%;
+  }
+
+  .auth-form h2 {
+    font-size: 1.45rem;
+  }
+
+  .auth-form .subtle {
+    font-size: 0.92rem;
+    margin-bottom: 18px;
+  }
+
+  .form-control,
+  .form-select {
+    padding: 0.78rem 0.9rem;
+  }
+
+  .btn {
+    padding: 0.72rem 0.95rem;
   }
 
   .stat-card {
     min-height: auto;
   }
 
+  .section-card {
+    padding: 14px;
+  }
+
+  .section-head h5 {
+    font-size: 1rem;
+  }
+
   .table-responsive {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
   }
 
   .dropdown-menu {
@@ -894,51 +917,37 @@ html[data-theme="dark"] .dropdown-item:hover {
   }
 }
 
-/* Dark theme improvements */
-html[data-theme="dark"] .auth-hero .brand,
-html[data-theme="dark"] .auth-hero .brand span,
-html[data-theme="dark"] .auth-hero .brand i {
-  color: #ffffff !important;
-}
+@media (max-width: 520px) {
+  .app-shell {
+    grid-template-columns: 150px minmax(0, 1fr);
+  }
 
-html[data-theme="dark"] .auth-hero {
-  background: linear-gradient(180deg, #10162a 0%, #0f1220 100%);
-}
+  .brand span {
+    font-size: 0.88rem;
+  }
 
-html[data-theme="dark"] .auth-form {
-  background: #151a2d;
-  border-color: #27304a;
-}
+  .nav-item {
+    font-size: 0.84rem;
+    padding: 9px 10px;
+  }
 
-html[data-theme="dark"] .auth-hero p,
-html[data-theme="dark"] .auth-copy {
-  color: #b6bdd3;
-}
+  .page-title {
+    font-size: 1.15rem;
+  }
 
-html[data-theme="dark"] .auth-art {
-  background: linear-gradient(180deg, #12172a 0%, #151a2d 100%);
-  border-color: #27304a;
-}
+  .auth-card {
+    grid-template-columns: 0.7fr 1.3fr;
+  }
 
-html[data-theme="dark"] .auth-art-box {
-  background: #0f1426;
-  border: 1px solid #27304a;
-}
+  .auth-hero h1 {
+    font-size: 1.35rem;
+  }
 
-html[data-theme="dark"] .auth-art-text {
-  color: #e9ecf5;
-}
+  .auth-hero p {
+    font-size: 0.82rem;
+  }
 
-html[data-theme="dark"] .dropdown-menu {
-  background: #151a2d;
-  border-color: #27304a;
+  .auth-form {
+    padding: 14px;
+  }
 }
-
-html[data-theme="dark"] .dropdown-item {
-  color: #e9ecf5;
-}
-
-html[data-theme="dark"] .dropdown-item:hover {
-  background: #20273f;
-}
-
