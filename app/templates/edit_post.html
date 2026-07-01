@@ -1,72 +1,68 @@
 {% extends 'base.html' %}
-{% block title %}Edit Post - Social Media Content Planner{% endblock %}
+{% block title %}Edit Post - Content Planner{% endblock %}
+{% block page_title %}Edit Post{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-lg-10">
-    <div class="card p-4">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="mb-0">Edit Post</h3>
-        <a href="{{ url_for('main.posts') }}" class="btn btn-outline-secondary">Back</a>
-      </div>
-
-      <form method="POST" action="{{ url_for('main.edit_post', post_id=post.id) }}">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label class="form-label">Campaign</label>
-            <select class="form-select" name="campaign_id" required>
-              <option value="">Select campaign</option>
-              {% for campaign in campaigns %}
-                <option value="{{ campaign.id }}" {% if campaign.id == post.campaign_id %}selected{% endif %}>
-                  {{ campaign.name }}
-                </option>
-              {% endfor %}
-            </select>
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">Platform</label>
-            <select class="form-select" name="platform" required>
-              <option value="">Select platform</option>
-              <option value="Facebook" {% if post.platform == 'Facebook' %}selected{% endif %}>Facebook</option>
-              <option value="Instagram" {% if post.platform == 'Instagram' %}selected{% endif %}>Instagram</option>
-              <option value="LinkedIn" {% if post.platform == 'LinkedIn' %}selected{% endif %}>LinkedIn</option>
-              <option value="TikTok" {% if post.platform == 'TikTok' %}selected{% endif %}>TikTok</option>
-              <option value="X" {% if post.platform == 'X' %}selected{% endif %}>X</option>
-            </select>
-          </div>
-
-          <div class="col-12">
-            <label class="form-label">Post Title</label>
-            <input type="text" class="form-control" name="title" value="{{ post.title }}" required>
-          </div>
-
-          <div class="col-12">
-            <label class="form-label">Content / Caption</label>
-            <textarea class="form-control" rows="5" name="content" required>{{ post.content }}</textarea>
-          </div>
-
-          <div class="col-md-4">
-            <label class="form-label">Schedule Date & Time</label>
-            <input type="datetime-local" class="form-control" name="scheduled_at"
-                   value="{{ post.scheduled_at.strftime('%Y-%m-%dT%H:%M') if post.scheduled_at else '' }}">
-          </div>
-
-          <div class="col-md-4">
-            <label class="form-label">Status</label>
-            <select class="form-select" name="status">
-              <option value="Draft" {% if post.status == 'Draft' %}selected{% endif %}>Draft</option>
-              <option value="Scheduled" {% if post.status == 'Scheduled' %}selected{% endif %}>Scheduled</option>
-              <option value="Posted" {% if post.status == 'Posted' %}selected{% endif %}>Posted</option>
-            </select>
-          </div>
-
-          <div class="col-12 text-end">
-            <button type="submit" class="btn btn-primary">Update Post</button>
-          </div>
-        </div>
-      </form>
+<div class="cardx form-card">
+  <div class="section-card">
+    <div class="section-head">
+      <h5>Edit Post</h5>
+      <a href="{{ url_for('main.posts') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Back</a>
     </div>
+
+    <form method="POST" action="{{ url_for('main.edit_post', post_id=post.id) }}">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Campaign</label>
+          <select class="form-select" name="campaign_id" required>
+            <option value="">Select campaign</option>
+            {% for campaign in campaigns %}
+              <option value="{{ campaign.id }}" {% if campaign.id == post.campaign_id %}selected{% endif %}>{{ campaign.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Platform</label>
+          <select class="form-select" name="platform" required>
+            <option value="">Select platform</option>
+            <option value="Facebook" {% if post.platform == 'Facebook' %}selected{% endif %}>Facebook</option>
+            <option value="Instagram" {% if post.platform == 'Instagram' %}selected{% endif %}>Instagram</option>
+            <option value="LinkedIn" {% if post.platform == 'LinkedIn' %}selected{% endif %}>LinkedIn</option>
+            <option value="TikTok" {% if post.platform == 'TikTok' %}selected{% endif %}>TikTok</option>
+            <option value="X" {% if post.platform == 'X' %}selected{% endif %}>X</option>
+          </select>
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">Post Title</label>
+          <input type="text" class="form-control" name="title" value="{{ post.title }}" required>
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">Content / Caption</label>
+          <textarea class="form-control" rows="6" name="content" required>{{ post.content }}</textarea>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Schedule Date & Time</label>
+          <input type="datetime-local" class="form-control" name="scheduled_at" value="{{ post.scheduled_at.strftime('%Y-%m-%dT%H:%M') if post.scheduled_at else '' }}">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Status</label>
+          <select class="form-select" name="status">
+            <option value="Draft" {% if post.status == 'Draft' %}selected{% endif %}>Draft</option>
+            <option value="Scheduled" {% if post.status == 'Scheduled' %}selected{% endif %}>Scheduled</option>
+            <option value="Posted" {% if post.status == 'Posted' %}selected{% endif %}>Posted</option>
+          </select>
+        </div>
+
+        <div class="col-12 text-end mt-3">
+          <button type="submit" class="btn btn-primary px-4">Update Post</button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
 {% endblock %}

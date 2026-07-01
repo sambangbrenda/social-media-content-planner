@@ -1,25 +1,19 @@
 {% extends 'base.html' %}
-{% block title %}Calendar - Social Media Content Planner{% endblock %}
+{% block title %}Calendar - Content Planner{% endblock %}
+{% block page_title %}Calendar{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h3 class="mb-0">Calendar</h3>
-  <a class="btn btn-primary" href="{{ url_for('main.new_post') }}">New Post</a>
-</div>
-
-<div class="card p-3 mb-3">
+<div class="cardx section-card mb-3">
   <form method="GET" action="{{ url_for('main.calendar') }}">
     <div class="row g-3 align-items-end">
       <div class="col-md-4">
         <label class="form-label">Start Date</label>
         <input type="date" name="start_date" class="form-control" value="{{ start_date_raw }}">
       </div>
-
       <div class="col-md-4">
         <label class="form-label">End Date</label>
         <input type="date" name="end_date" class="form-control" value="{{ end_date_raw }}">
       </div>
-
       <div class="col-md-4 d-flex gap-2">
         <button type="submit" class="btn btn-primary w-100">Filter</button>
         <a href="{{ url_for('main.calendar') }}" class="btn btn-outline-secondary w-100">Reset</a>
@@ -28,11 +22,16 @@
   </form>
 </div>
 
-<div class="card p-4">
+<div class="cardx section-card">
+  <div class="section-head">
+    <h5>Calendar View</h5>
+    <a class="btn btn-primary btn-sm" href="{{ url_for('main.new_post') }}"><i class="bi bi-plus-lg"></i> New Post</a>
+  </div>
+
   {% if grouped_posts %}
     {% for date, posts in grouped_posts.items() %}
       <div class="mb-4">
-        <h5 class="mb-3">
+        <h5 class="mb-3 fw-bold">
           {% if date == "Unscheduled" %}
             Unscheduled Posts
           {% else %}
@@ -43,21 +42,17 @@
         <div class="row g-3">
           {% for post in posts %}
             <div class="col-md-6 col-lg-4">
-              <div class="card h-100 p-3">
+              <div class="cardx section-card h-100">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                   <strong>{{ post.title }}</strong>
-                  <span class="badge bg-secondary">{{ post.status }}</span>
+                  <span class="pill {% if post.status == 'Scheduled' %}scheduled{% elif post.status == 'Posted' %}published{% else %}draft{% endif %}">{{ post.status }}</span>
                 </div>
-
                 <p class="text-muted mb-2">{{ post.platform }}</p>
                 <p class="mb-0 small">
                   {{ post.content[:120] }}{% if post.content|length > 120 %}...{% endif %}
                 </p>
-
                 {% if post.scheduled_at %}
-                  <p class="mt-3 mb-0 small text-muted">
-                    Scheduled: {{ post.scheduled_at.strftime("%Y-%m-%d %H:%M") }}
-                  </p>
+                  <p class="mt-3 mb-0 small text-muted">Scheduled: {{ post.scheduled_at.strftime("%Y-%m-%d %H:%M") }}</p>
                 {% endif %}
               </div>
             </div>

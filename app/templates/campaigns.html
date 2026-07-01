@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
-{% block title %}Campaigns - Social Media Content Planner{% endblock %}
+{% block title %}Campaigns - Content Planner{% endblock %}
+{% block page_title %}Campaigns{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h3 class="mb-0">Campaigns</h3>
-  <a href="{{ url_for('main.new_campaign') }}" class="btn btn-primary">Add Campaign</a>
-</div>
+<div class="cardx section-card">
+  <div class="section-head">
+    <h5>Campaigns</h5>
+    <a class="btn btn-primary btn-sm" href="{{ url_for('main.new_campaign') }}"><i class="bi bi-plus-lg"></i> Add Campaign</a>
+  </div>
 
-<div class="card p-3">
   {% if campaigns %}
     <div class="table-responsive">
       <table class="table align-middle">
@@ -23,21 +24,17 @@
         <tbody>
           {% for campaign in campaigns %}
           <tr>
-            <td>{{ campaign.name }}</td>
+            <td class="fw-semibold">{{ campaign.name }}</td>
             <td>{{ campaign.description or '-' }}</td>
             <td>{{ campaign.start_date or '-' }}</td>
             <td>{{ campaign.end_date or '-' }}</td>
-            <td class="d-flex gap-2">
-              <a href="{{ url_for('main.edit_campaign', campaign_id=campaign.id) }}"
-                 class="btn btn-sm btn-outline-primary">Edit</a>
-
-              <form action="{{ url_for('main.delete_campaign', campaign_id=campaign.id) }}"
-                    method="POST" style="display:inline;">
-                <button type="submit" class="btn btn-sm btn-outline-danger"
-                        onclick="return confirm('Delete this campaign? This will also delete its posts.');">
-                  Delete
-                </button>
-              </form>
+            <td>
+              <div class="d-flex gap-2">
+                <a href="{{ url_for('main.edit_campaign', campaign_id=campaign.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                <form action="{{ url_for('main.delete_campaign', campaign_id=campaign.id) }}" method="POST" onsubmit="return confirm('Delete this campaign? This will also delete its posts.');">
+                  <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+              </div>
             </td>
           </tr>
           {% endfor %}

@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from flask_login import login_user, logout_user, login_required, current_user
 from app import db
 from app.models import User, Campaign, Post
@@ -510,3 +510,53 @@ def calendar():
         start_date_raw=start_date_raw,
         end_date_raw=end_date_raw,
     )
+
+@main_bp.route("/profile")
+@login_required
+def profile():
+    return render_template("profile.html")
+
+@main_bp.route("/settings", methods=["GET", "POST"])
+@login_required
+def settings():
+    if request.method == "POST":
+        theme = request.form.get("theme", "light")
+        default_view = request.form.get("default_view", "dashboard")
+
+        if theme not in ["light", "dark"]:
+            theme = "light"
+
+        session["theme"] = theme
+        session["default_view"] = default_view
+
+        flash("Settings saved successfully.", "success")
+        return redirect(url_for("main.settings"))
+
+    return render_template("settings.html")
+
+@main_bp.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "POST":
+        email = request.form.get("email", "").strip().lower()
+        new_password = request.form.get("new_password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        if not email or not new_password or not confirm_password:
+            flash("Please fill in all fields.", "danger")
+            return redirect(url_for("main.forgot_password"))
+
+        if new_password != confirm_password:
+            flash("Passwords do not match.", "danger")
+            return redirect(url_for("main.forgot_password"))
+
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            flash("No account found with that email.", "danger")
+            return redirect(url_for("main.forgot_password"))
+
+        user.set_password(new_password)
+        db.session.commit()
+        flash("Password reset successfully. Please log in.", "success")
+        return redirect(url_for("main.login"))
+
+    return render_template("forgot_password.html")

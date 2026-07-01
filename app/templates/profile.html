@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Profile - Social Media Content Planner{% endblock %}
+{% block page_title %}Profile{% endblock %}
+
+{% block content %}
+<div class="cardx section-card">
+  <div class="section-head">
+    <h5>Profile Information</h5>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="mb-2"><strong>Full Name:</strong></div>
+      <div class="text-muted">{{ current_user.name }}</div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb-2"><strong>Email:</strong></div>
+      <div class="text-muted">{{ current_user.email }}</div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb-2"><strong>User ID:</strong></div>
+      <div class="text-muted">{{ current_user.id }}</div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb-2"><strong>Account Status:</strong></div>
+      <div class="text-muted">Active</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

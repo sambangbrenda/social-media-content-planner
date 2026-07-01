@@ -1,94 +1,148 @@
 {% extends 'base.html' %}
-{% block title %}Dashboard - Social Media Content Planner{% endblock %}
+{% block title %}Dashboard - Content Planner{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
 {% block content %}
 <div class="row g-3">
-  <div class="col-md-3"><div class="card p-3 stat-card"><h6>Total Posts</h6><h2>{{ stats.total_posts }}</h2></div></div>
-  <div class="col-md-3"><div class="card p-3 stat-card"><h6>Scheduled</h6><h2>{{ stats.scheduled_posts }}</h2></div></div>
-  <div class="col-md-3"><div class="card p-3 stat-card"><h6>Drafts</h6><h2>{{ stats.draft_posts }}</h2></div></div>
-  <div class="col-md-3"><div class="card p-3 stat-card"><h6>Published</h6><h2>{{ stats.published_posts }}</h2></div></div>
+  <div class="col-md-3">
+    <div class="cardx stat-card cardx-soft">
+      <div class="stat-top">
+        <div class="stat-ico ico-purple"><i class="bi bi-file-earmark-text"></i></div>
+        <div>
+          <div class="stat-label">Total Posts</div>
+          <div class="stat-value">{{ stats.total_posts }}</div>
+        </div>
+      </div>
+      <div class="stat-foot">All time</div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="cardx stat-card cardx-soft" style="background: linear-gradient(180deg,#fbfff9,#f4fff7);">
+      <div class="stat-top">
+        <div class="stat-ico ico-green"><i class="bi bi-calendar-event"></i></div>
+        <div>
+          <div class="stat-label">Scheduled</div>
+          <div class="stat-value">{{ stats.scheduled_posts }}</div>
+        </div>
+      </div>
+      <div class="stat-foot">Upcoming posts</div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="cardx stat-card cardx-soft" style="background: linear-gradient(180deg,#fffaf4,#fffdf8);">
+      <div class="stat-top">
+        <div class="stat-ico ico-orange"><i class="bi bi-send"></i></div>
+        <div>
+          <div class="stat-label">Published</div>
+          <div class="stat-value">{{ stats.published_posts }}</div>
+        </div>
+      </div>
+      <div class="stat-foot">This month</div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="cardx stat-card cardx-soft" style="background: linear-gradient(180deg,#f8fbff,#fbfcff);">
+      <div class="stat-top">
+        <div class="stat-ico ico-blue"><i class="bi bi-pencil"></i></div>
+        <div>
+          <div class="stat-label">Drafts</div>
+          <div class="stat-value">{{ stats.draft_posts }}</div>
+        </div>
+      </div>
+      <div class="stat-foot">Save for later</div>
+    </div>
+  </div>
 </div>
 
 <div class="row mt-4 g-3">
-  <div class="col-md-4">
-    <div class="card p-3 stat-card h-100">
-      <h6>Total Campaigns</h6>
-      <h2>{{ summary.total_campaigns }}</h2>
-      <p class="text-muted mb-0">Campaigns currently active in your account.</p>
-    </div>
-  </div>
+  <div class="col-lg-8">
+    <div class="cardx section-card">
+      <div class="section-head">
+        <h5>Upcoming Posts</h5>
+        <a class="link-accent" href="{{ url_for('main.calendar') }}">View Calendar</a>
+      </div>
 
-  <div class="col-md-4">
-    <div class="card p-3 stat-card h-100">
-      <h6>Posts This Week</h6>
-      <h2>{{ summary.upcoming_7_days }}</h2>
-      <p class="text-muted mb-0">Scheduled within the next 7 days.</p>
-    </div>
-  </div>
-
-  <div class="col-md-4">
-    <div class="card p-3 stat-card h-100">
-      <h6>Next Scheduled Post</h6>
-      <h2 style="font-size: 1.2rem;">{{ summary.next_scheduled_post }}</h2>
-      <p class="text-muted mb-0">Your nearest planned publication.</p>
-    </div>
-  </div>
-</div>
-
-<div class="row mt-4 g-3">
-  <div class="col-lg-6">
-    <div class="card p-3 h-100">
-      <h5 class="mb-3">Post Status Overview</h5>
-      <canvas id="postStatusChart" height="220"></canvas>
-    </div>
-  </div>
-
-  <div class="col-lg-6">
-    <div class="card p-3 h-100">
-      <h5>Upcoming Posts</h5>
       {% if upcoming_posts %}
-        <ul class="list-group list-group-flush">
-          {% for post in upcoming_posts %}
-            <li class="list-group-item d-flex justify-content-between">
-              <span>{{ post.title }}</span>
-              <span>{{ post.platform }} · {{ post.status }}</span>
-            </li>
-          {% endfor %}
-        </ul>
+        {% for post in upcoming_posts %}
+          <div class="upcoming-item">
+            <div class="brand-small">
+              <div class="platform-icon {% if post.platform == 'Instagram' %}platform-ig{% elif post.platform == 'Facebook' %}platform-fb{% elif post.platform == 'LinkedIn' %}platform-li{% else %}platform-x{% endif %}">
+                <i class="bi {% if post.platform == 'Instagram' %}bi-instagram{% elif post.platform == 'Facebook' %}bi-facebook{% elif post.platform == 'LinkedIn' %}bi-linkedin{% else %}bi-twitter-x{% endif %}"></i>
+              </div>
+              <div>
+                <div class="fw-bold">{{ post.title }}</div>
+                <div class="text-muted small">{{ post.platform }}</div>
+              </div>
+            </div>
+            <div class="text-end">
+              <div class="fw-semibold">{{ post.scheduled_at.strftime('%b %d, %Y') if post.scheduled_at else '-' }}</div>
+              <div class="text-muted small">{{ post.scheduled_at.strftime('%I:%M %p') if post.scheduled_at else '-' }}</div>
+            </div>
+          </div>
+        {% endfor %}
       {% else %}
         <p class="text-muted mb-0">No posts yet. Create your first post.</p>
       {% endif %}
+
+      <div class="mt-3">
+        <a class="link-accent" href="{{ url_for('main.posts') }}">View all posts <i class="bi bi-arrow-right ms-1"></i></a>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="row mt-4 g-3">
   <div class="col-lg-4">
-    <div class="card p-3">
-      <h5>Quick Actions</h5>
-      <a class="btn btn-primary w-100 mb-2" href="{{ url_for('main.new_post') }}">Create New Post</a>
-      <a class="btn btn-outline-secondary w-100 mb-2" href="{{ url_for('main.new_campaign') }}">Create Campaign</a>
-      <a class="btn btn-outline-secondary w-100" href="{{ url_for('main.calendar') }}">View Calendar</a>
+    <div class="cardx section-card mb-3">
+      <div class="section-head">
+        <h5>Quick Actions</h5>
+      </div>
+      <div class="d-grid gap-2">
+        <a class="quick-btn primary" href="{{ url_for('main.new_post') }}"><i class="bi bi-plus-lg"></i> Create New Post</a>
+        <a class="quick-btn" href="{{ url_for('main.new_campaign') }}"><i class="bi bi-plus-lg"></i> Create Campaign</a>
+        <a class="quick-btn" href="{{ url_for('main.calendar') }}"><i class="bi bi-calendar3"></i> View Calendar</a>
+      </div>
+    </div>
+
+    <div class="cardx section-card">
+      <div class="section-head">
+        <h5>Content Summary</h5>
+      </div>
+
+      <div class="summary-ring">
+        <div class="chart-wrap" style="flex: 1 1 230px; min-width: 220px;">
+          <canvas id="postStatusChart" height="220"></canvas>
+        </div>
+        <div style="flex: 1 1 190px; min-width: 180px;">
+          <div class="mb-3"><span class="mini-dot" style="background:#6b3df6"></span>Scheduled ({{ stats.scheduled_posts }})</div>
+          <div class="mb-3"><span class="mini-dot" style="background:#1fb36b"></span>Published ({{ stats.published_posts }})</div>
+          <div><span class="mini-dot" style="background:#ff9c24"></span>Drafts ({{ stats.draft_posts }})</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+{% endblock %}
 
+{% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   const ctx = document.getElementById('postStatusChart').getContext('2d');
   new Chart(ctx, {
-    type: 'bar',
+    type: 'doughnut',
     data: {
       labels: {{ chart_data['labels'] | tojson }},
       datasets: [{
-        label: 'Posts',
         data: {{ chart_data['post_values'] | tojson }},
-        borderWidth: 1
+        backgroundColor: ['#ff9c24', '#6b3df6', '#1fb36b'],
+        borderWidth: 0,
+        hoverOffset: 4
       }]
     },
     options: {
-      scales: {
-        y: { beginAtZero: true, ticks: { precision: 0 } }
-      }
+      cutout: '68%',
+      plugins: { legend: { display: false } }
     }
   });
 </script>

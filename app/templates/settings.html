@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Settings - Social Media Content Planner{% endblock %}
+{% block page_title %}Settings{% endblock %}
+
+{% block content %}
+<div class="cardx section-card">
+  <div class="section-head">
+    <h5>Account Settings</h5>
+  </div>
+
+  <form method="POST" action="{{ url_for('main.settings') }}">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Display Name</label>
+        <input type="text" class="form-control" value="{{ current_user.name }}" readonly>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" value="{{ current_user.email }}" readonly>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Default View</label>
+        <select class="form-select" name="default_view">
+          <option value="dashboard">Dashboard</option>
+          <option value="posts">Posts</option>
+          <option value="calendar">Calendar</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Theme</label>
+        <select class="form-select" name="theme">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </div>
+
+      <div class="col-12 text-end mt-3">
+        <button type="submit" class="btn btn-primary px-4">Save Settings</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
